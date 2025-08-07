@@ -1,7 +1,7 @@
 # 🧛 Vampire
 
 Unity 기반의 2D 액션 게임 프로젝트입니다.  
-이 문서는 프로젝트 전체 디렉토리 구조와 `Assets/Scripts` 내 주요 스크립트에 대한 설명을 포함합니다.
+이 문서는 프로젝트 전체 디렉토리 구조, 폴더별 책임, 주요 시스템 흐름 및 예시를 제공합니다.
 
 ---
 
@@ -22,47 +22,72 @@ Vampire/
 
 ---
 
-## 📂 Scripts
+## 📦 폴더 책임 (Folder Responsibilities)
 
-### ✅ Datas
-- **`ItemData.cs`**: 아이템 정보를 담는 `ScriptableObject`.  
-  - 아이템 종류, 레벨별 수치, 기본 능력치, 투사체/아이콘 등을 정의.
-
----
-
-### ✅ Game
-- **`AchiveManager.cs`**: 업적 조건을 체크하고, 캐릭터 해금을 처리.
-- **`AudioManager.cs`**: BGM 및 효과음을 관리하는 싱글턴.
-- **`Bullet.cs`**: 투사체의 이동, 데미지 처리, 관통 및 비활성화 처리.
-- **`Character.cs`**: 플레이어 공통 속성(속도 배율 등) 제공.
-- **`Enemy.cs`**: 적의 AI 이동, 피격, 사망 처리.
-- **`Follow.cs`**: UI가 플레이어를 따라오게 위치 동기화.
-- **`GameManager.cs`**: 게임 시간, 경험치, 승리/패배 조건 제어.
-- **`Gear.cs`**: 장비를 통해 플레이어 및 무기 스탯 보정.
-- **`Hand.cs`**: 손 오브젝트의 방향 및 위치 조정.
-- **`Player.cs`**: 입력을 받아 이동, 충돌 시 체력 감소 및 사망 처리.
-- **`PoolManager.cs`**: 오브젝트 풀링 관리.
-- **`Repostion.cs`**: 영역 밖으로 나간 지형/적 재배치.
-- **`Scanner.cs`**: 주변 적 탐지 및 타겟 선택.
-- **`Spawner.cs`**: 적 생성 및 `SpawnData` 구조체 정의.
-- **`Weapon.cs`**: 무기 회전, 발사, 레벨업, 총알 생성 로직.
+| 폴더            | 역할                                                         |
+|-----------------|--------------------------------------------------------------|
+| `Datas/`        | `ScriptableObject` 기반 설정 데이터 정의                    |
+| `Game/`         | 게임 로직, 캐릭터, 무기, 적, 매니저 등 핵심 시스템 구현     |
+| `UI/`           | HUD, 레벨업, 결과창 등 사용자 인터페이스 요소 관리         |
+| `Utility/`      | 싱글턴, 확장 메서드, 공통 유틸리티 스크립트                  |
 
 ---
 
-### ✅ UI
-- **`HUD.cs`**: HUD 정보(레벨, 처치 수, 시간, 체력 등) 갱신.
-- **`GameResult.cs`**: 승리/패배 화면 UI 처리.
-- **`Item.cs`**: 아이템 선택 UI와 업그레이드 로직 관리.
-- **`LevelUp.cs`**: 레벨업 UI 생성 및 무작위 아이템 선택.
+## 🎮 게임 실행 흐름 (Game Flow)
+
+1. **게임 시작** → `GameManager` 초기화  
+2. **적 생성** → `Spawner`가 `Enemy` 생성  
+3. **플레이어 입력** → `Player` 이동 및 공격 처리  
+4. **투사체 발사** → `Weapon`이 `Bullet` 생성 / `PoolManager`에서 할당  
+5. **충돌 처리** → `Bullet`이 `Enemy`와 충돌, 데미지 계산 및 비활성화  
+6. **HUD 갱신** → `HUD`가 경험치, 레벨, 체력, 시간 등을 업데이트  
+7. **승리/패배 판단** → 조건 충족 시 `GameResult` UI 표시  
 
 ---
 
-### ✅ Utility
-- **`Singleton.cs`**: 싱글턴 패턴의 베이스 클래스.
-- **`ExtensionMethods.cs`**: 공통 확장 메서드 정의.
+## 🧩 매니저 관계도 (Manager Relationships)
+
+- `GameManager`
+  - 관리: 게임 상태, 경험치, 레벨, 시간, 승패 등
+  - ├── `PoolManager` (오브젝트 풀 관리)
+  - ├── `AudioManager` (BGM 및 효과음 재생)
+  - ├── `Spawner` (적 생성 및 타이밍 제어)
+  - ├── `AchiveManager` (업적 조건 및 보상 처리)
+  - └── `HUD` (UI 정보 갱신)
+
+---
+
+## 🚀 기능 예시: Bullet 발사 흐름 (Feature Example)
+
+```plaintext
+Player.cs (입력 감지)
+  ↓
+Weapon.cs (방향 및 발사 로직)
+  ↓
+PoolManager.cs (재사용 가능한 Bullet 할당)
+  ↓
+Bullet.cs (이동, 충돌 감지, 데미지 처리)
+  ↓
+Enemy.cs (피격 및 사망 처리)
+  ↓
+HUD.cs (처치 수 갱신)
+```
+
+---
+
+## 📂 스크립트 주요 요약 (Scripts Overview)
+
+- **Datas/ItemData.cs**: 아이템 정보 설정 (`ScriptableObject`)  
+- **Game/GameManager.cs**: 게임 전반 상태 제어  
+- **Game/Player.cs**: 플레이어 이동 및 입력 처리  
+- **Game/Spawner.cs**: 적 생성 로직  
+- **Game/PoolManager.cs**: 오브젝트 풀 관리  
+- **UI/HUD.cs**: HUD 정보 업데이트  
+- **Utility/Singleton.cs**: 싱글턴 패턴 베이스 클래스  
 
 ---
 
 ## 📝 참고
-- 프로젝트는 `GameManager` 중심으로 전체 흐름을 제어하며,  
-  대부분의 기능은 `PoolManager`, `AudioManager`, `Spawner` 등 전용 매니저 스크립트와 상호작용합니다.
+
+- 각 시스템은 **모듈화** 되어 있어, 추가 기능 도입 시에도 **폴더 및 클래스 구조를 유지**하면 확장과 유지보수가 용이합니다.
+- 필요에 따라 **클래스 다이어그램**이나 **유스케이스 다이어그램**을 추가하면 더욱 효과적입니다.
