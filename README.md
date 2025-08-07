@@ -1,9 +1,3 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a//dev/null b/README.md
-index 0000000000000000000000000000000000000000..762152492f22983e5a1a83446876107726451c29 100644
---- a//dev/null
-+++ b/README.md
-@@ -0,0 +1,52 @@
 +# Vampire
 +
 +Unity 기반의 2D 액션 게임 프로젝트입니다. 본 문서는 프로젝트의 전체 구조와 **Assets/Scripts** 폴더에 포함된 주요 스크립트를 설명합니다.
