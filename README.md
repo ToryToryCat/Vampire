@@ -1,3 +1,24 @@
+# 🧛 Vampire
+
+Unity 기반의 2D 액션 게임 프로젝트입니다.  
+이 문서는 프로젝트 전체 디렉토리 구조와 `Assets/Scripts` 내 주요 스크립트에 대한 설명을 포함합니다.
+
+---
+
+## 📁 프로젝트 구조
+
+```
+Vampire/
+├── Assets/
+│   ├── Scripts/
+│   │   ├── Datas/
+│   │   ├── Game/
+│   │   ├── UI/
+│   │   └── Utility/
+│   └── ...
+├── Packages/
+└── ProjectSettings/
+```
 
 ---
 
@@ -37,10 +58,8 @@
 ---
 
 ### ✅ Utility
-> ⚠️ 현재 설명 누락됨. 사용 중인 스크립트가 있다면 여기에 추가하는 것이 좋음.  
-예시:
-- **`Singleton<T>.cs`**: 싱글턴 패턴의 베이스 클래스.
-- **`ExtensionMethods.cs`**: 확장 메서드 모음 등.
+- **`Singleton.cs`**: 싱글턴 패턴의 베이스 클래스.
+- **`ExtensionMethods.cs`**: 공통 확장 메서드 정의.
 
 ---
 
