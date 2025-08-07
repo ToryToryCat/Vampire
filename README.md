@@ -43,6 +43,21 @@ Vampire/
 6. **HUD 갱신** → `HUD`가 경험치, 레벨, 체력, 시간 등을 업데이트  
 7. **승리/패배 판단** → 조건 충족 시 `GameResult` UI 표시  
 
+```mermaid
+flowchart TD
+    A[게임 시작] --> B[GameManager 초기화]
+    B --> C[Spawner가 Enemy 생성]
+    C --> D[Player 입력 감지]
+    D --> E[Weapon 발사]
+    E --> F[PoolManager에서 Bullet 할당]
+    F --> G[Bullet 이동 및 충돌 감지]
+    G --> H[Enemy 피격 처리]
+    H --> I[HUD 갱신]
+    I --> J{승리/패배 판단}
+    J -->|승리| K[승리 화면 표시]
+    J -->|패배| L[패배 화면 표시]
+```
+
 ---
 
 ## 🧩 매니저 관계도 (Manager Relationships)
@@ -54,6 +69,27 @@ Vampire/
   - ├── `Spawner` (적 생성 및 타이밍 제어)
   - ├── `AchiveManager` (업적 조건 및 보상 처리)
   - └── `HUD` (UI 정보 갱신)
+
+```mermaid
+classDiagram
+    class GameManager {
+        +int level
+        +float gameTime
+        +StartGame()
+        +EndGame()
+    }
+    class PoolManager
+    class AudioManager
+    class Spawner
+    class AchiveManager
+    class HUD
+
+    GameManager --> PoolManager
+    GameManager --> AudioManager
+    GameManager --> Spawner
+    GameManager --> AchiveManager
+    GameManager --> HUD
+```
 
 ---
 
